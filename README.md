@@ -10,6 +10,7 @@ A Discord bot wich allows you to get Informations about IP Adresses and Domains.
 - `$about` - *Get Informations About this Bot*
 
 ##Generated Report
+
 ![image](https://user-images.githubusercontent.com/89642388/176907740-6aaea0af-b9c8-4fc6-b64d-91859577a079.png)
 
 ## Used Services
