@@ -46,6 +46,7 @@ https://ip.steinlarve.de
 **About**
 ➥ DiscordPHP ➨ https://discord-php.github.io/DiscordPHP/
 ➥ IP-API ➨ https://ip-api.com/
+➥ GitHub ➨ https://github.com/LarvenStein/ip-insights-discord
 ➥ GitHub (Website) ➨ https://github.com/LarvenStein/IP-Lookup
 --
 Made with ❤️ by 𝚂𝚝𝚎𝚒𝚗𝙻𝚊𝚛𝚟𝚎#2354
