@@ -23,7 +23,11 @@ $discord->on('ready', function(Discord $discord){
         if($content === '$help') {
             $help ='
 **Commands**
+
 `​$​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*
+`​$​p​i​n​g​ [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*
+
+--
 
 `$website` - *Get a Link to a Website that does the Same* 
 `$about` - *Get Informations About this Bot* 
@@ -117,6 +121,25 @@ Please follow this command scheme `​$​l​o​o​k​u​p​ [INSERT IP AD
             ');
         }
         }
+        }
+        if(strpos($content, '$ping') === false) {
+
+        } else {
+            $query = end(explode(' ',$content));
+
+            $ignore = '[INSERT IP ADRESS / DOMAIN HERE]';
+
+            if($query == $ignore) {
+               echo 'none';
+            } else {
+$ping = exec("ping -n 5 ".$query."");
+                $pingreply = '
+                    **'.$query.'**
+
+'.$ping.'
+                ';
+                $message->reply($pingreply);
+            }
         }
     });
 });
