@@ -4,8 +4,10 @@ A Discord bot wich allows you to get Informations about IP Adresses and Domains.
 **<[Invite the Bot](https://discord.com/api/oauth2/authorize?client_id=992069594900611213&permissions=67584&scope=bot) / [Web Version](https://github.com/LarvenStein/IP-Lookup)>**
 
 ## Commands
-- `$help` - *Gives Informations about all available Commands*
 - `$lookup [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*
+- `$ping` - *Ping an IP adress or Domain*
+
+- `$help` - *Gives Informations about all available Commands*
 - `$website` - *Get a Link to a Website that does the Same*
 - `$about` - *Get Informations About this Bot*
 
