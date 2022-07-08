@@ -11,8 +11,14 @@ A Discord bot wich allows you to get Informations about IP Adresses and Domains.
 - `$website` - *Get a Link to a Website that does the Same*
 - `$about` - *Get Informations About this Bot*
 
-## Generated Report
+## Generated Reports
+
+### $lookup report
 ![image](https://user-images.githubusercontent.com/89642388/176907740-6aaea0af-b9c8-4fc6-b64d-91859577a079.png)
+
+### $ping report
+![image](https://user-images.githubusercontent.com/89642388/178030338-4c056cb0-9de9-4a9d-9d51-88fc1a850463.png)
+
 
 ## Used Services
 - [DiscordPHP](https://github.com/discord-php/DiscordPHP)
