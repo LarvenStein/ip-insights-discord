@@ -132,11 +132,17 @@ Please follow this command scheme `​$​l​o​o​k​u​p​ [INSERT IP AD
             if($query == $ignore) {
                echo 'none';
             } else {
-$ping = exec("ping -n 5 ".$query."");
-                $pingreply = '
-                    **'.$query.'**
+                # This will not work in Windows
+$pingraw = exec("ping -c 3 ".$query."");
+$ping = explode("/", $pingraw);
 
-'.$ping.'
+                $pingreply = '
+                    Ping Results for **'.$query.'**
+
+*min* => `'.trim($ping['3'], 'mdev =').' ms`
+*'.$ping['1'].'* => `'.$ping['4'].' ms`
+*'.$ping['2'].'* => `'.$ping['5'].' ms`
+*mdev* => `'.trim($ping['6'], 'ms ').' ms`
                 ';
                 $message->reply($pingreply);
             }
