@@ -3,6 +3,9 @@ use Discord\Discord;
 use Discord\Websockets\Event;
 use Discord\Websockets\Intents;
 use Discord\Parts\User\Activity;
+use Discord\Builders\MessageBuilder;
+use Discord\Parts\Channel;
+
 require_once('./vendor/autoload.php');
 require_once('./key.php');
 $key = getKey();
@@ -25,6 +28,7 @@ $discord->on('ready', function(Discord $discord){
 **Commands**
 
 `​$​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*
+`​$​w​h​o​i​s [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain ᵇᵉᵗᵃ*
 `​$​p​i​n​g​ [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*
 
 --
@@ -97,6 +101,7 @@ Made with ❤️ by 𝚂𝚝𝚎𝚒𝚗𝙻𝚊𝚛𝚟𝚎#2354
  *Region:*  `'.$ipdata['regionName'].' ('.$ipdata['region'].')`
  *Country:*  `'.$ipdata['country'].' ('.$ipdata['countryCode'].')`
  *Continent:*  `'.$ipdata['continent'].' ('.$ipdata['continentCode'].')`
+ *LAT/LON:* `'.$ipdata['lat'].'/'.$ipdata['lon'].'`
  *Currency:*  `'.$ipdata['currency'].'`
  *Timezone:*  `'.$ipdata['timezone'].'`
  *ISP:*  `'.$ipdata['isp'].'`
@@ -105,16 +110,21 @@ Made with ❤️ by 𝚂𝚝𝚎𝚒𝚗𝙻𝚊𝚛𝚟𝚎#2354
  *VPN/Proxy:*  `'.$vpn.'`
  *Mobile:*  `'.$mobile.'`
  *Datacenter:*  `'.$datacenter.'`
-
 --
 *Permanent URL:*
 https://ip.steinlarve.de?query='.$query.'
 --
 
 *Approximate position: *
- https://www.openstreetmap.org/?mlat='.$ipdata['lat'].'&mlon='.$ipdata['lon'].'#map=15/'.$ipdata['lat'].'/'.$ipdata['lon'].'
             ';
             $message->reply($reply);
+            $remessage = MessageBuilder::new()
+            ->setContent('https://static-maps.yandex.ru/1.x/?lang=en-US&ll='.$ipdata['lon'].','.$ipdata['lat'].'&z=9&l=map,trf&size=650,450')
+            ->setTts(false);
+
+            $message->channel->sendMessage($remessage)->done(function (Message $remessage) {
+            // ...
+            });
         }else {
             $message->reply('**Your request failed!**
 Please follow this command scheme `​$​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` **(only the Domain/IP Adress. No Protocols or Directories.)** Example: `​$​l​o​o​k​u​p​ google.com`
@@ -146,6 +156,32 @@ $ping = explode("/", $pingraw);
                 ';
                 $message->reply($pingreply);
             }
+        }
+        if(strpos($content, '$whois') === false) {
+
+        } else {
+            # This also will not work in Windows
+            $whoisid = 'whois_reports/' . uniqid('WHOIS_') . '.txt';
+            $whoisquery = end(explode(' ',$content));
+            exec("whois -I -- '".$whoisquery."'", $whoisdata);
+            echo("whois -I -- '".$whoisquery."'");
+
+            $exsisting_whois_data = file_get_contents($whoisid);
+
+            foreach($whoisdata as $item){
+                $entirewhoisdata .= $item . "\n";
+            }
+
+            file_put_contents($whoisid, $entirewhoisdata);
+
+
+            $whoismsg = MessageBuilder::new()
+                ->setContent('**WHOIS Report for '.$whoisquery.'** ᵇᵉᵗᵃ')
+                ->addFile($whoisid);
+
+            $message->reply($whoismsg);
+
+            !unlink($whoisid);
         }
     });
 });
