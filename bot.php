@@ -28,7 +28,7 @@ $discord->on('ready', function(Discord $discord){
 **Commands**
 
 `​$​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*
-`​$​w​h​o​i​s [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain ᵇᵉᵗᵃ*
+`​$​w​h​o​i​s​ [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain ᵇᵉᵗᵃ*
 `​$​p​i​n​g​ [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*
 
 --
@@ -142,6 +142,12 @@ Please follow this command scheme `​$​l​o​o​k​u​p​ [INSERT IP AD
             if($query == $ignore) {
                echo 'none';
             } else {
+                $statusdata = file_get_contents('http://ip-api.com/json/'.$query.'?fields=16384');
+
+                $statusdata_decode = json_decode($statusdata, true);
+    
+                if($statusdata_decode['status'] == 'success') {
+
                 # This will not work in Windows
 $pingraw = exec("ping -c 3 ".$query."");
 $ping = explode("/", $pingraw);
@@ -155,14 +161,26 @@ $ping = explode("/", $pingraw);
 *mdev* => `'.trim($ping['6'], 'ms ').' ms`
                 ';
                 $message->reply($pingreply);
+                } else {
+                    $message->reply('**Your request failed!**
+Please follow this command scheme `​$​p​i​n​g​ [INSERT IP ADRESS / DOMAIN HERE]` **(only the Domain/IP Adress. No Protocols or Directories.)** Example: `​$​p​i​n​g​ google.com`
+                ');
+                }
             }
         }
         if(strpos($content, '$whois') === false) {
 
         } else {
+            $whoisquery = end(explode(' ',$content));
+
+            $statusdata = file_get_contents('http://ip-api.com/json/'.$whoisquery.'?fields=16384');
+
+            $statusdata_decode = json_decode($statusdata, true);
+
+            if($statusdata_decode['status'] == 'success') {
+
             # This also will not work in Windows
             $whoisid = 'whois_reports/' . uniqid('WHOIS_') . '.txt';
-            $whoisquery = end(explode(' ',$content));
             exec("whois -I -- '".$whoisquery."'", $whoisdata);
             echo("whois -I -- '".$whoisquery."'");
 
@@ -182,6 +200,11 @@ $ping = explode("/", $pingraw);
             $message->reply($whoismsg);
 
             !unlink($whoisid);
+            } else {
+                $message->reply('**Your request failed!**
+Please follow this command scheme `​$​w​h​o​i​s​​ [INSERT IP ADRESS / DOMAIN HERE]` **(only the Domain/IP Adress. No Protocols or Directories.)** Example: `​$​w​h​o​i​s​​ google.com`
+            ');
+            }
         }
     });
 });
