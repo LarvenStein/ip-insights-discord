@@ -5,7 +5,10 @@ use Discord\Websockets\Intents;
 use Discord\Parts\User\Activity;
 use Discord\Builders\MessageBuilder;
 use Discord\Parts\Channel;
+use Unirest\Request;
 
+require_once 'vendor/autoload.php';
+require_once 'vendor/mashape/unirest-php/src/Unirest.php';
 require_once('./vendor/autoload.php');
 require_once('./key.php');
 $key = getKey();
@@ -181,17 +184,102 @@ Please follow this command scheme `​$​p​i​n​g​ [INSERT IP ADRESS / D
 
             # This also will not work in Windows
             $whoisid = 'whois_reports/' . uniqid('WHOIS_') . '.txt';
-            exec("whois -I -- '".$whoisquery."'", $whoisdata);
-            echo("whois -I -- '".$whoisquery."'");
+            
+            $customer_id = whoisID();
+            $api_key = whoisKey();
 
-            $exsisting_whois_data = file_get_contents($whoisid);
+            Unirest\Request::auth($customer_id, $api_key);
+            $headers = array("Accept" => "application/json");
+            $url = "https://jsonwhoisapi.com/api/v1/whois?identifier=".$whoisquery."";
+            $response = Unirest\Request::get($url, $headers);
 
-            foreach($whoisdata as $item){
-                $entirewhoisdata .= $item . "\n";
+            print_r($response);
+
+            foreach($response->body->nameservers as $ns){
+                $nameserver .= $ns . "\n";
+            }
+            foreach($response->body->contacts->owner as $owner){
+                $ownercontact = $owner;
+            }
+            foreach($response->body->contacts->admin as $admin){
+                $admincontact = $admin;
+            }
+            foreach($response->body->contacts->tech as $tech){
+                $techcontact = $tech;
             }
 
-            file_put_contents($whoisid, $entirewhoisdata);
 
+
+            $whoismessage = '
+Name: '.$response->body->name.'
+Created: '.$response->body->created.'
+Changed: '.$response->body->changed.'
+Expires: '.$response->body->expires.'
+Dnssec: '.$response->body->dnssec.'
+Registerd: '.$response->body->registered.'
+Status: '.$response->body->status.'
+
+==Nameservers==
+'.$nameserver.'
+
+==Registrar==
+ID: '.$response->body->registrar->id.'
+Name: '.$response->body->registrar->name.'
+Email: '.$response->body->registrar->email.'
+URL: '.$response->body->registrar->url.'
+Phone: '.$response->body->registrar->phone.'
+
+==Owner Contact==
+Handle: '.$ownercontact->handle.'
+Type: '.$ownercontact->type.'
+Name: '.$ownercontact->name.'
+Organization: '.$ownercontact->organization.'
+E-Mail: '.$ownercontact->email.'
+Adress: '.$ownercontact->adress.'
+Zip Code: '.$ownercontact->zipcode.'
+City: '.$ownercontact->city.'
+State: '.$ownercontact->state.'
+Country: '.$ownercontact->country.'
+Phone: '.$ownercontact->phone.'
+Fax: '.$ownercontact->fax.'
+Created: '.$ownercontact->created.'
+Changed: '.$ownercontact->changed.'
+
+==Admin Contact==
+Handle: '.$admincontact->handle.'
+Type: '.$admincontact->type.'
+Name: '.$admincontact->name.'
+Organization: '.$admincontact->organization.'
+E-Mail: '.$admincontact->email.'
+Adress: '.$admincontact->adress.'
+Zip Code: '.$admincontact->zipcode.'
+City: '.$admincontact->city.'
+State: '.$admincontact->state.'
+Country: '.$admincontact->country.'
+Phone: '.$admincontact->phone.'
+Fax: '.$admincontact->fax.'
+Created: '.$admincontact->created.'
+Changed: '.$admincontact->changed.'
+
+==Tech Contact==
+Handle: '.$techcontact->handle.'
+Type: '.$techcontact->type.'
+Name: '.$techcontact->name.'
+Organization: '.$techcontact->organization.'
+E-Mail: '.$techcontact->email.'
+Adress: '.$techcontact->adress.'
+Zip Code: '.$techcontact->zipcode.'
+City: '.$techcontact->city.'
+State: '.$techcontact->state.'
+Country: '.$techcontact->country.'
+Phone: '.$techcontact->phone.'
+Fax: '.$techcontact->fax.'
+Created: '.$techcontact->created.'
+Changed: '.$techcontact->changed.'
+
+            ';
+
+            file_put_contents($whoisid, $whoismessage);
 
             $whoismsg = MessageBuilder::new()
                 ->setContent('**WHOIS Report for '.$whoisquery.'** ᵇᵉᵗᵃ')
