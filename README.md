@@ -28,6 +28,7 @@ A Discord bot wich allows you to get Informations about IP Adresses and Domains.
 - [DiscordPHP](https://github.com/discord-php/DiscordPHP)
 - [IP-API](https://ip-api.com/ "IP-API")
 - [Yandex Static Maps](https://yandex.com/dev/maps/staticapi/ "Yandex Static Maps")
+- [Json Whois Api](https://www.jsonwhoisapi.com/ "Json Whois Api")
 
 ------------
 
