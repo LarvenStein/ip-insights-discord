@@ -182,7 +182,6 @@ Please follow this command scheme `​$​p​i​n​g​ [INSERT IP ADRESS / D
 
             if($statusdata_decode['status'] == 'success') {
 
-            # This also will not work in Windows
             $whoisid = 'whois_reports/' . uniqid('WHOIS_') . '.txt';
             
             $customer_id = whoisID();
