@@ -15,16 +15,19 @@ A Discord bot wich allows you to get Informations about IP Adresses and Domains.
 ## Generated Reports
 
 ### $lookup report
-![image](https://user-images.githubusercontent.com/89642388/176907740-6aaea0af-b9c8-4fc6-b64d-91859577a079.png)
+![image](https://user-images.githubusercontent.com/89642388/180652348-226e3e1a-b323-4825-bdc8-ab723a8a65d7.png)
+
+## $whois report
+![image](https://user-images.githubusercontent.com/89642388/180652404-bcd20420-5b18-46bd-9a52-8069a4fa80b1.png)
 
 ### $ping report
-![image](https://user-images.githubusercontent.com/89642388/178030338-4c056cb0-9de9-4a9d-9d51-88fc1a850463.png)
+![image](https://user-images.githubusercontent.com/89642388/180652379-4464099b-30e9-4b7c-b514-32d025dc3590.png)
 
 
 ## Used Services
 - [DiscordPHP](https://github.com/discord-php/DiscordPHP)
 - [IP-API](https://ip-api.com/ "IP-API")
-- [OpenStreetMap](https://www.openstreetmap.org/ "OpenStreetMap")
+- [Yandex Static Maps](https://yandex.com/dev/maps/staticapi/ "Yandex Static Maps")
 
 ------------
 
