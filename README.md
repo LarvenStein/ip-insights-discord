@@ -1,16 +1,21 @@
+![text](https://user-images.githubusercontent.com/89642388/180851002-f280b3e2-33de-4a23-b34d-1e0f243fbc11.gif)
+
 # IP Insights Discord
 A Discord bot wich allows you to get Informations about IP Adresses and Domains. Based on DiscordPHP
 
 **<[Invite the Bot](https://discord.com/api/oauth2/authorize?client_id=992069594900611213&permissions=67584&scope=bot) / [Web Version](https://github.com/LarvenStein/IP-Lookup)>**
 
-## Commands
-- `$lookup [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*
-- `$whois [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain ᵇᵉᵗᵃ*
-- `$ping [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*
+## Important
+Please Remove [Line 22 - 37](https://github.com/LarvenStein/ip-insights-discord/blob/b31cc6c021699c2176d20203c730e1360668aea2/bot.php#L22) from bot.php after all commands are Registerd!
 
-- `$help` - *Gives Informations about all available Commands*
-- `$website` - *Get a Link to a Website that does the Same*
-- `$about` - *Get Informations About this Bot*
+## Commands
+- `/lookup [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*
+- `/whois [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain ᵇᵉᵗᵃ*
+- `/ping [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*
+
+- `/help` - *Gives Informations about all available Commands*
+- `/website` - *Get a Link to a Website that does the Same*
+- `/about` - *Get Informations About this Bot*
 
 ## Generated Reports
 
