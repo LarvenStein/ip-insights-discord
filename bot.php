@@ -35,7 +35,6 @@ $discord->on('ready', function(Discord $discord){
     $discord->application->commands->save($command);
 
     //
-
     echo'Bot ist Online';
 
         $activity = $discord->factory(\Discord\Parts\User\Activity::class);
@@ -547,9 +546,9 @@ Changed: '.$techcontact->changed.'
 
     !unlink($whoisid);
     } else {
-        $message->reply('**Your request failed!**
+        $interaction->respondWithMessage(MessageBuilder::new()->setContent('**Your request failed!**
 Please follow this command scheme `​$​w​h​o​i​s​​ [INSERT IP ADRESS / DOMAIN HERE]` **(only the Domain/IP Adress. No Protocols or Directories.)** Example: `​$​w​h​o​i​s​​ google.com`
-    ');
+    '));
     }
 });
 
@@ -583,9 +582,9 @@ $ping = explode("/", $pingraw);
         ';
         $interaction->respondWithMessage(MessageBuilder::new()->setContent($pingreply));
         } else {
-            $message->reply('**Your request failed!**
+            $interaction->respondWithMessage(MessageBuilder::new()->setContent('**Your request failed!**
 Please follow this command scheme `​$​p​i​n​g​ [INSERT IP ADRESS / DOMAIN HERE]` **(only the Domain/IP Adress. No Protocols or Directories.)** Example: `​$​p​i​n​g​ google.com`
-        ');
+        '));
         }
     }
 });
