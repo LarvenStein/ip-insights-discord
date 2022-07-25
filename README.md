@@ -3,10 +3,10 @@
 # IP Insights Discord
 A Discord bot wich allows you to get Informations about IP Adresses and Domains. Based on DiscordPHP
 
-**<[Invite the Bot](https://discord.com/api/oauth2/authorize?client_id=992069594900611213&permissions=67584&scope=bot) / [Web Version](https://github.com/LarvenStein/IP-Lookup)>**
+**<[Invite the Bot](https://discord.com/oauth2/authorize?client_id=992069594900611213&permissions=67584&scope=bot%20applications.commands) / [Web Version](https://github.com/LarvenStein/IP-Lookup)>**
 
 ## Important
-Please Remove [Line 22 - 37](https://github.com/LarvenStein/ip-insights-discord/blob/b31cc6c021699c2176d20203c730e1360668aea2/bot.php#L22) from bot.php after all commands are Registerd!
+Please Remove [Line 22 - 37](https://github.com/LarvenStein/ip-insights-discord/blob/b31cc6c021699c2176d20203c730e1360668aea2/bot.php#L22) from bot.php after all Slash commands are Registerd!
 
 ## Commands
 - `/lookup [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*
