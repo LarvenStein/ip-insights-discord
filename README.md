@@ -1,5 +1,3 @@
-![text](https://user-images.githubusercontent.com/89642388/180851002-f280b3e2-33de-4a23-b34d-1e0f243fbc11.gif)
-
 # IP Insights Discord
 A Discord bot wich allows you to get Informations about IP Adresses and Domains. Based on DiscordPHP
 
