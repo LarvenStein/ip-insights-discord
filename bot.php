@@ -19,22 +19,22 @@ $key = getKey();
 
 $discord = new Discord(['token'=>$key]);
 $discord->on('ready', function(Discord $discord){
-    // Remove this after all the commands are registerd
+        // Remove this after all the commands are registerd
 
-    $command = new Command($discord, ['name' => 'lookup', 'description' => 'Lookup Informations about Ip adresses or Domains', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
-    $discord->application->commands->save($command);
-    $command = new Command($discord, ['name' => 'whois', 'description' => 'Get WHOIS Informations about a IP adress or Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
-    $discord->application->commands->save($command);
-    $command = new Command($discord, ['name' => 'ping', 'description' => 'Ping an IP adress or Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
-    $discord->application->commands->save($command);
-    $command = new Command($discord, ['name' => 'website', 'description' => 'Get a Link to a Website that does the Same']);
-    $discord->application->commands->save($command);
-    $command = new Command($discord, ['name' => 'about', 'description' => 'Get Informations About this Bot']);
-    $discord->application->commands->save($command);
-    $command = new Command($discord, ['name' => 'help', 'description' => 'Get a list of Commands']);
-    $discord->application->commands->save($command);
-
-    //
+        $command = new Command($discord, ['name' => 'lookup', 'description' => 'Lookup Informations about Ip adresses or Domains', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
+        $discord->application->commands->save($command);
+        $command = new Command($discord, ['name' => 'whois', 'description' => 'Get WHOIS Informations about a IP adress or Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
+        $discord->application->commands->save($command);
+        $command = new Command($discord, ['name' => 'ping', 'description' => 'Ping an IP adress or Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
+        $discord->application->commands->save($command);
+        $command = new Command($discord, ['name' => 'website', 'description' => 'Get a Link to a Website that does the Same']);
+        $discord->application->commands->save($command);
+        $command = new Command($discord, ['name' => 'about', 'description' => 'Get Informations About this Bot']);
+        $discord->application->commands->save($command);
+        $command = new Command($discord, ['name' => 'help', 'description' => 'Get a list of Commands']);
+        $discord->application->commands->save($command);
+    
+        //
     echo'Bot ist Online';
 
         $activity = $discord->factory(\Discord\Parts\User\Activity::class);
@@ -103,7 +103,8 @@ Made with ❤️ by 𝚂𝚝𝚎𝚒𝚗𝙻𝚊𝚛𝚟𝚎#2354
             } else {
 
             $ipdatajson = file_get_contents('http://ip-api.com/json/'.$query.'?fields=28569599');
-            $ipdata = json_decode($ipdatajson, true);
+            $ipdataraw = json_decode($ipdatajson, true);
+            $ipdata = str_replace('"', ' ', $ipdataraw);
 
             if($ipdata['status'] == 'success') {
 
@@ -123,36 +124,30 @@ Made with ❤️ by 𝚂𝚝𝚎𝚒𝚗𝙻𝚊𝚛𝚟𝚎#2354
                 $vpn = '✘';
             }
 
-            $reply = '
-**'.$query.' | '.$ipdata['query'].'**
- *City:*  `'.$ipdata['city'].' ('.$ipdata['zip'].')`
- *Region:*  `'.$ipdata['regionName'].' ('.$ipdata['region'].')`
- *Country:*  `'.$ipdata['country'].' ('.$ipdata['countryCode'].')`
- *Continent:*  `'.$ipdata['continent'].' ('.$ipdata['continentCode'].')`
- *LAT/LON:* `'.$ipdata['lat'].'/'.$ipdata['lon'].'`
- *Currency:*  `'.$ipdata['currency'].'`
- *Timezone:*  `'.$ipdata['timezone'].'`
- *ISP:*  `'.$ipdata['isp'].'`
- *ORG:*  `'.$ipdata['org'].'`
- *AS:*  `'.$ipdata['as'].'`
- *VPN/Proxy:*  `'.$vpn.'`
- *Mobile:*  `'.$mobile.'`
- *Datacenter:*  `'.$datacenter.'`
---
-*Permanent URL:*
-https://ip.steinlarve.de?query='.$query.'
---
-
-*Approximate position: *
+            $embedjson = '
+            {
+                "title": "'.$query.' | '.$ipdata['query'].'",
+                "color": 0,
+                "description": " *City:*  `'.$ipdata['city'].' ('.$ipdata['zip'].')`\n *Region:*  `'.$ipdata['regionName'].' ('.$ipdata['region'].')`\n *Country:*  `'.$ipdata['country'].' ('.$ipdata['countryCode'].')`\n *Continent:*  `'.$ipdata['continent'].' ('.$ipdata['continentCode'].')`\n *LAT/LON:* `'.$ipdata['lat'].'/'.$ipdata['lon'].'`\n *Currency:*  `'.$ipdata['currency'].'`\n *Timezone:*  `'.$ipdata['timezone'].'`\n *ISP:*  `'.$ipdata['isp'].'`\n *ORG:*  `'.$ipdata['org'].'`\n *AS:*  `'.$ipdata['as'].'`\n *VPN/Proxy:*  `'.$vpn.'`\n *Mobile:*  `'.$mobile.'`\n *Datacenter:*  `'.$datacenter.'`\n\n\n**Approximate position:**",
+                "timestamp": "",
+                "url": "https://ip.steinlarve.de?query='.$query.'",
+                "author": {},
+                "image": {
+                  "url": "https://static-maps.yandex.ru/1.x/?lang=en-US&ll='.$ipdata['lon'].','.$ipdata['lat'].'&z=9&l=map,trf&size=650,450"
+                },
+                "thumbnail": {},
+                "footer": {
+                  "icon_url": "https://cdn.discordapp.com/app-icons/992069594900611213/bf1b4647ea13794239710a83f002045c.png"
+                },
+                "fields": []
+              }
             ';
-            $message->reply($reply);
-            $remessage = MessageBuilder::new()
-            ->setContent('https://static-maps.yandex.ru/1.x/?lang=en-US&ll='.$ipdata['lon'].','.$ipdata['lat'].'&z=9&l=map,trf&size=650,450')
-            ->setTts(false);
+            $embed = json_decode($embedjson, true);
 
-            $message->channel->sendMessage($remessage)->done(function (Message $remessage) {
-            // ...
-            });
+            $embedmsg = MessageBuilder::new()
+            ->addEmbed($embed);
+
+            $message->reply($embedmsg);
         }else {
             $message->reply('**Your request failed!**
 Please follow this command scheme `​$​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` **(only the Domain/IP Adress. No Protocols or Directories.)** Example: `​$​l​o​o​k​u​p​ google.com`
@@ -380,7 +375,9 @@ $discord->listenCommand('lookup', function (Interaction $interaction) {
     } else {
 
     $ipdatajson = file_get_contents('http://ip-api.com/json/'.$query.'?fields=28569599');
-    $ipdata = json_decode($ipdatajson, true);
+    $ipdataraw = json_decode($ipdatajson, true);
+    $ipdata = str_replace('"', ' ', $ipdataraw);
+
 
     if($ipdata['status'] == 'success') {
 
@@ -399,31 +396,33 @@ $discord->listenCommand('lookup', function (Interaction $interaction) {
     } else {
         $vpn = '✘';
     }
+    if($ipdata['org'] < 1) {
+        $org = 'No Information';
+    } else {
+        $org = $ipdata['org'];
+    }
 
-    $reply = '
-**'.$query.' | '.$ipdata['query'].'**
-*City:*  `'.$ipdata['city'].' ('.$ipdata['zip'].')`
-*Region:*  `'.$ipdata['regionName'].' ('.$ipdata['region'].')`
-*Country:*  `'.$ipdata['country'].' ('.$ipdata['countryCode'].')`
-*Continent:*  `'.$ipdata['continent'].' ('.$ipdata['continentCode'].')`
-*LAT/LON:* `'.$ipdata['lat'].'/'.$ipdata['lon'].'`
-*Currency:*  `'.$ipdata['currency'].'`
-*Timezone:*  `'.$ipdata['timezone'].'`
-*ISP:*  `'.$ipdata['isp'].'`
-*ORG:*  `'.$ipdata['org'].'`
-*AS:*  `'.$ipdata['as'].'`
-*VPN/Proxy:*  `'.$vpn.'`
-*Mobile:*  `'.$mobile.'`
-*Datacenter:*  `'.$datacenter.'`
---
-*Permanent URL:*
-https://ip.steinlarve.de?query='.$query.'
---
+$embedjson = '
+            {
+                "title": "'.$query.' | '.$ipdata['query'].'",
+                "color": 0,
+                "description": " *City:*  `'.$ipdata['city'].' ('.$ipdata['zip'].')`\n *Region:*  `'.$ipdata['regionName'].' ('.$ipdata['region'].')`\n *Country:*  `'.$ipdata['country'].' ('.$ipdata['countryCode'].')`\n *Continent:*  `'.$ipdata['continent'].' ('.$ipdata['continentCode'].')`\n *LAT/LON:* `'.$ipdata['lat'].'/'.$ipdata['lon'].'`\n *Currency:*  `'.$ipdata['currency'].'`\n *Timezone:*  `'.$ipdata['timezone'].'`\n *ISP:*  `'.$ipdata['isp'].'`\n *ORG:*  `'.$org.'`\n *AS:*  `'.$ipdata['as'].'`\n *VPN/Proxy:*  `'.$vpn.'`\n *Mobile:*  `'.$mobile.'`\n *Datacenter:*  `'.$datacenter.'`\n\n\n**Approximate position:**",
+                "timestamp": "",
+                "url": "https://ip.steinlarve.de?query='.$query.'",
+                "author": {},
+                "image": {
+                  "url": "https://static-maps.yandex.ru/1.x/?lang=en-US&ll='.$ipdata['lon'].','.$ipdata['lat'].'&z=9&l=map,trf&size=650,450"
+                },
+                "thumbnail": {},
+                "footer": {
+                  "icon_url": "https://cdn.discordapp.com/app-icons/992069594900611213/bf1b4647ea13794239710a83f002045c.png"
+                },
+                "fields": []
+              }
+            ';
+            $embed = json_decode($embedjson, true);
 
-*Approximate position: *
-    ';
-    $interaction->respondWithMessage(MessageBuilder::new()->setContent($reply));
-    $interaction->sendFollowUpMessage(MessageBuilder::new()->setContent('https://static-maps.yandex.ru/1.x/?lang=en-US&ll='.$ipdata['lon'].','.$ipdata['lat'].'&z=9&l=map,trf&size=650,450'));
+    $interaction->respondWithMessage(MessageBuilder::new()->addEmbed($embed));
 }else {
     $interaction->respondWithMessage(MessageBuilder::new()->setContent('**Your request failed!**
 Please follow this command scheme `​$​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` **(only the Domain/IP Adress. No Protocols or Directories.)** Example: `​$​l​o​o​k​u​p​ google.com`
