@@ -19,8 +19,8 @@ $key = getKey();
 
 $discord = new Discord(['token'=>$key]);
 $discord->on('ready', function(Discord $discord){
-        // Remove this after all the commands are registerd
-
+        // Remove this
+        
         $command = new Command($discord, ['name' => 'lookup', 'description' => 'Lookup Informations about Ip adresses or Domains', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
         $discord->application->commands->save($command);
         $command = new Command($discord, ['name' => 'whois', 'description' => 'Get WHOIS Informations about a IP adress or Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
@@ -33,8 +33,10 @@ $discord->on('ready', function(Discord $discord){
         $discord->application->commands->save($command);
         $command = new Command($discord, ['name' => 'help', 'description' => 'Get a list of Commands']);
         $discord->application->commands->save($command);
-    
-        //
+    $command = new Command($discord, ['name' => 'dnslookup', 'description' => 'Lookup DNS Records for a specific Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain', 'required' => true]]]);
+    $discord->application->commands->save($command);
+        
+        // To this 
     echo'Bot ist Online';
 
         $activity = $discord->factory(\Discord\Parts\User\Activity::class);
@@ -52,7 +54,8 @@ $discord->on('ready', function(Discord $discord){
 **Commands**
 
 `​/​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*
-`​/​w​h​o​i​s​ [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain ᵇᵉᵗᵃ*
+`​/​w​h​o​i​s​ [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain*
+`​/d​n​s​l​o​o​k​u​p [INSERT DOMAIN HERE]` - *Lookup DNS Records for a specific Domain*
 `​/​p​i​n​g​ [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*
 
 --
@@ -76,18 +79,33 @@ https://ip.steinlarve.de
         }
 
         if($content === '$about') {
-            $aboutinfo ='
-**About**
-            ➥ DiscordPHP ➨ https://discord-php.github.io/DiscordPHP/
-            ➥ IP-API ➨ https://ip-api.com/
-            ➥ Json Whois API ➨ https://www.jsonwhoisapi.com/
-            ➥ Yandex Static Maps ➨ https://yandex.com/dev/maps/staticapi/
-            ➥ GitHub ➨ https://github.com/LarvenStein/ip-insights-discord
-            ➥ GitHub (Website) ➨ https://github.com/LarvenStein/IP-Lookup
-            --
-Made with ❤️ by 𝚂𝚝𝚎𝚒𝚗𝙻𝚊𝚛𝚟𝚎#2354
+            $embedjson = '
+            {
+                "title": "About IP Insights",
+                "color": 0,
+                "description": "IP Insights is a Discord bot wich allows you to get Informations about IP Addresses and Domains. \n\n*Credits*\n\n    ➥ DiscordPHP ➨ https://slt.k.vu/FT4C\n    ➥ IP-API ➨ https://slt.k.vu/C67W\n    ➥ Json Whois API ➨ https://slt.k.vu/P!I6\n    ➥ DNS Lookup API by hackertarget ➨ https://slt.k.vu/CYZ-\n    ➥ Yandex Static Maps ➨ https://slt.k.vu/HKSO\n    ➥ GitHub ➨ https://slt.k.vu/GCQF\n    ➥ GitHub (Website) ➨ https://slt.k.vu/VQOM",
+                "timestamp": "",
+                "url": "",
+                "author": {
+                  "name": ""
+                },
+                "image": {},
+                "thumbnail": {
+                  "url": "https://cdn.discordapp.com/app-icons/992069594900611213/bf1b4647ea13794239710a83f002045c.png"
+                },
+                "footer": {
+                  "text": "Made with ❤️ by 𝚂𝚝𝚎𝚒𝚗𝙻𝚊𝚛𝚟𝚎#2354"
+                },
+                "fields": []
+              }
             ';
-            $message->reply($aboutinfo);
+
+            $embed = json_decode($embedjson, true);
+
+            $embedmsg = MessageBuilder::new()
+            ->addEmbed($embed);
+
+            $message->reply($embedmsg);
         }
 
 
@@ -301,7 +319,7 @@ Changed: '.$techcontact->changed.'
             file_put_contents($whoisid, $whoismessage);
 
             $whoismsg = MessageBuilder::new()
-                ->setContent('**WHOIS Report for '.$whoisquery.'** ᵇᵉᵗᵃ')
+                ->setContent('**WHOIS Report for '.$whoisquery.'**')
                 ->addFile($whoisid);
 
             $message->reply($whoismsg);
@@ -313,6 +331,32 @@ Please follow this command scheme `​$​w​h​o​i​s​​ [INSERT IP ADR
             ');
             }
         }
+
+        if(strpos($content, '$dnslookup') === false) {
+
+        } else {
+            $dnsquery = end(explode(' ',$content));
+            $dnsraw = file_get_contents('https://api.hackertarget.com/dnslookup/?q='.$dnsquery.'');
+    
+            if($dnsraw == 'error input invalid - enter IP or Hostname') {
+                $dnsrp = '**Your request failed!**
+Please follow this command scheme `​$​d​n​s​l​o​o​k​u​p​ [DOMAIN HERE]` **(only the Domain. No Protocols, IP Adresses or Directories.)** Example: `​$​d​n​s​l​o​o​k​u​p​​ google.com`';
+    
+            } elseif($dnsraw == 'try reverse dns tool for ipaddress') {
+                $dnsrp = '**Your request failed!**
+Please follow this command scheme `​$​d​n​s​l​o​o​k​u​p​ [DOMAIN HERE]` **(This command ONLY supports DOMAINS)** Example: `​$​d​n​s​l​o​o​k​u​p​​ google.com`';
+    
+            } else {
+                $dnsrp = '**DNS Lookup for '.$dnsquery.'**
+
+'.$dnsraw.'
+                ';
+            }
+    
+    
+            $message->reply($dnsrp);
+        }
+
     });
 
 });
@@ -327,19 +371,30 @@ https://ip.steinlarve.de
 });
 
 $discord->listenCommand('about', function (Interaction $interaction) {
-    $aboutinfo ='
-    **About**
-    ➥ DiscordPHP ➨ https://discord-php.github.io/DiscordPHP/
-    ➥ IP-API ➨ https://ip-api.com/
-    ➥ Json Whois API ➨ https://www.jsonwhoisapi.com/
-    ➥ Yandex Static Maps ➨ https://yandex.com/dev/maps/staticapi/
-    ➥ GitHub ➨ https://github.com/LarvenStein/ip-insights-discord
-    ➥ GitHub (Website) ➨ https://github.com/LarvenStein/IP-Lookup
-    --
-    Made with ❤️ by 𝚂𝚝𝚎𝚒𝚗𝙻𝚊𝚛𝚟𝚎#2354
-                ';
+    $embedjson = '
+    {
+        "title": "About IP Insights",
+        "color": 0,
+        "description": "IP Insights is a Discord bot wich allows you to get Informations about IP Addresses and Domains. \n\n*Credits*\n\n    ➥ DiscordPHP ➨ https://slt.k.vu/FT4C\n    ➥ IP-API ➨ https://slt.k.vu/C67W\n    ➥ Json Whois API ➨ https://slt.k.vu/P!I6\n    ➥ DNS Lookup API by hackertarget ➨ https://slt.k.vu/CYZ-\n    ➥ Yandex Static Maps ➨ https://slt.k.vu/HKSO\n    ➥ GitHub ➨ https://slt.k.vu/GCQF\n    ➥ GitHub (Website) ➨ https://slt.k.vu/VQOM",
+        "timestamp": "",
+        "url": "",
+        "author": {
+          "name": ""
+        },
+        "image": {},
+        "thumbnail": {
+          "url": "https://cdn.discordapp.com/app-icons/992069594900611213/bf1b4647ea13794239710a83f002045c.png"
+        },
+        "footer": {
+          "text": "Made with ❤️ by 𝚂𝚝𝚎𝚒𝚗𝙻𝚊𝚛𝚟𝚎#2354"
+        },
+        "fields": []
+      }
+    ';
 
-    $interaction->respondWithMessage(MessageBuilder::new()->setContent($aboutinfo));
+    $embed = json_decode($embedjson, true);
+
+    $interaction->respondWithMessage(MessageBuilder::new()->addEmbed($embed));
 });
 
 $discord->listenCommand('help', function (Interaction $interaction) {
@@ -347,7 +402,8 @@ $discord->listenCommand('help', function (Interaction $interaction) {
     **Commands**
     
     `​/​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*
-    `​/​w​h​o​i​s​ [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain ᵇᵉᵗᵃ*
+    `​/​w​h​o​i​s​ [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain*
+    `​/d​n​s​l​o​o​k​u​p [INSERT DOMAIN HERE]` - *Lookup DNS Records for a specific Domain*
     `​/​p​i​n​g​ [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*
     
     --
@@ -541,7 +597,7 @@ Changed: '.$techcontact->changed.'
 
     file_put_contents($whoisid, $whoismessage);
 
-    $interaction->respondWithMessage(MessageBuilder::new()->setContent('**WHOIS Report for '.$whoisquery.'** ᵇᵉᵗᵃ')->addFile($whoisid));
+    $interaction->respondWithMessage(MessageBuilder::new()->setContent('**WHOIS Report for '.$whoisquery.'**')->addFile($whoisid));
 
     !unlink($whoisid);
     } else {
@@ -586,6 +642,32 @@ Please follow this command scheme `​$​p​i​n​g​ [INSERT IP ADRESS / D
         '));
         }
     }
+});
+
+# DNS Lookup
+
+$discord->listenCommand('dnslookup', function (Interaction $interaction) {
+    $dnsquery = $interaction['data']['options']['query']['value'];
+
+    $dnsraw = file_get_contents('https://api.hackertarget.com/dnslookup/?q='.$dnsquery.'');
+
+    if($dnsraw == 'error input invalid - enter IP or Hostname') {
+        $dnsrp = '**Your request failed!**
+Please follow this command scheme `​$​d​n​s​l​o​o​k​u​p​ [DOMAIN HERE]` **(only the Domain. No Protocols, IP Adresses or Directories.)** Example: `​$​d​n​s​l​o​o​k​u​p​​ google.com`';
+
+    } elseif($dnsraw == 'try reverse dns tool for ipaddress') {
+        $dnsrp = '**Your request failed!**
+Please follow this command scheme `​$​d​n​s​l​o​o​k​u​p​ [DOMAIN HERE]` **(This command ONLY supports DOMAINS)** Example: `​$​d​n​s​l​o​o​k​u​p​​ google.com`';
+
+    } else {
+        $dnsrp = '**DNS Lookup for '.$dnsquery.'**
+
+'.$dnsraw.'
+        ';
+    }
+
+
+    $interaction->respondWithMessage(MessageBuilder::new()->setContent($dnsrp));
 });
 
 $discord->run();
