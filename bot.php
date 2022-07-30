@@ -50,22 +50,34 @@ $discord->on('ready', function(Discord $discord){
         if(strpos($content, '$') === false) return;
 
         if($content === '$help') {
-            $help ='
-**Commands**
-
-`​/​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*
-`​/​w​h​o​i​s​ [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain*
-`​/d​n​s​l​o​o​k​u​p [INSERT DOMAIN HERE]` - *Lookup DNS Records for a specific Domain*
-`​/​p​i​n​g​ [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*
-
---
-
-`​/​w​e​b​s​i​t​e​` - *Get a Link to a Website that does the Same* 
-`​/​a​b​o​u​t​`​ - *Get Informations About this Bot* 
-
-*If the Slash Commands are not Working, Reinvite the Bot with the new Premissions: https://ip.steinlarve.de/dc-bot*
+            $embedjson = '
+            {
+                "title": "IP Insights Commands",
+                "color": 0,
+                "description": "`​/​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*\n\n`​/​w​h​o​i​s​ [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain*\n\n`​/d​n​s​l​o​o​k​u​p [INSERT DOMAIN HERE]` - *Lookup DNS Records for a specific Domain*\n\n`​/​p​i​n​g​ [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*\n\n--\n\n\n`​/​w​e​b​s​i​t​e​` - *Get a Link to a Website that does the Same* \n\n`​/​a​b​o​u​t​`​ - *Get Informations About this Bot* \n\n\n",
+                "timestamp": "",
+                "author": {
+                  "name": "",
+                  "icon_url": ""
+                },
+                "image": {},
+                "thumbnail": {
+                  "url": ""
+                },
+                "footer": {
+                  "text": "If the Slash Commands are not Working, Reinvite the Bot with the new Premissions: https://ip.steinlarve.de/dc-bot/",
+                  "icon_url": "https://cdn.discordapp.com/app-icons/992069594900611213/bf1b4647ea13794239710a83f002045c.png"
+                },
+                "fields": []
+              }
             ';
-            $message->reply($help);
+
+            $embed = json_decode($embedjson, true);
+
+            $embedmsg = MessageBuilder::new()
+            ->addEmbed($embed);
+
+            $message->reply($embedmsg);
         } else {
 
         }
@@ -399,23 +411,31 @@ $discord->listenCommand('about', function (Interaction $interaction) {
 });
 
 $discord->listenCommand('help', function (Interaction $interaction) {
-    $help ='
-    **Commands**
-    
-    `​/​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*
-    `​/​w​h​o​i​s​ [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain*
-    `​/d​n​s​l​o​o​k​u​p [INSERT DOMAIN HERE]` - *Lookup DNS Records for a specific Domain*
-    `​/​p​i​n​g​ [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*
-    
-    --
-    
-    `​/​w​e​b​s​i​t​e​` - *Get a Link to a Website that does the Same* 
-    `​/​a​b​o​u​t​`​ - *Get Informations About this Bot* 
+    $embedjson = '
+    {
+        "title": "IP Insights Commands",
+        "color": 0,
+        "description": "`​/​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*\n\n`​/​w​h​o​i​s​ [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain*\n\n`​/d​n​s​l​o​o​k​u​p [INSERT DOMAIN HERE]` - *Lookup DNS Records for a specific Domain*\n\n`​/​p​i​n​g​ [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*\n\n--\n\n\n`​/​w​e​b​s​i​t​e​` - *Get a Link to a Website that does the Same* \n\n`​/​a​b​o​u​t​`​ - *Get Informations About this Bot* \n\n\n",
+        "timestamp": "",
+        "author": {
+          "name": "",
+          "icon_url": ""
+        },
+        "image": {},
+        "thumbnail": {
+          "url": ""
+        },
+        "footer": {
+          "text": "If the Slash Commands are not Working, Reinvite the Bot with the new Premissions: https://ip.steinlarve.de/dc-bot/",
+          "icon_url": "https://cdn.discordapp.com/app-icons/992069594900611213/bf1b4647ea13794239710a83f002045c.png"
+        },
+        "fields": []
+      }
+    ';
 
-    *If the Slash Commands are not Working, Reinvite the Bot with the new Premissions: https://ip.steinlarve.de/dc-bot*
-                ';
+    $embed = json_decode($embedjson, true);
 
-    $interaction->respondWithMessage(MessageBuilder::new()->setContent($help));
+    $interaction->respondWithMessage(MessageBuilder::new()->addEmbed($embed));
 });
 
 # Lookup
