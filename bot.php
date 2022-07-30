@@ -348,8 +348,9 @@ Please follow this command scheme `​$​d​n​s​l​o​o​k​u​p​ [
     
             } else {
                 $dnsrp = '**DNS Lookup for '.$dnsquery.'**
-
+```
 '.$dnsraw.'
+```
                 ';
             }
     
@@ -661,9 +662,10 @@ Please follow this command scheme `​$​d​n​s​l​o​o​k​u​p​ [
 
     } else {
         $dnsrp = '**DNS Lookup for '.$dnsquery.'**
-
+```
 '.$dnsraw.'
-        ';
+```
+';
     }
 
 
