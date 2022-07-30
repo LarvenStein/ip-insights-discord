@@ -66,7 +66,7 @@ $discord->on('ready', function(Discord $discord){
                 },
                 "footer": {
                   "text": "If the Slash Commands are not Working, Reinvite the Bot with the new Premissions: https://ip.steinlarve.de/dc-bot/",
-                  "icon_url": "https://cdn.discordapp.com/app-icons/992069594900611213/bf1b4647ea13794239710a83f002045c.png"
+                  "icon_url": "https://cdn.discordapp.com/attachments/992074702308782090/1002957251226652723/498591d63b352256a1bf18061eff9d57.png"
                 },
                 "fields": []
               }
@@ -427,7 +427,7 @@ $discord->listenCommand('help', function (Interaction $interaction) {
         },
         "footer": {
           "text": "If the Slash Commands are not Working, Reinvite the Bot with the new Premissions: https://ip.steinlarve.de/dc-bot/",
-          "icon_url": "https://cdn.discordapp.com/app-icons/992069594900611213/bf1b4647ea13794239710a83f002045c.png"
+          "icon_url": "https://cdn.discordapp.com/attachments/992074702308782090/1002957251226652723/498591d63b352256a1bf18061eff9d57.png"
         },
         "fields": []
       }
