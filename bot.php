@@ -2,8 +2,8 @@
 include './vendor/autoload.php';
 
 use Discord\Discord;
+use Discord\WebSockets\Intents;
 use Discord\Websockets\Event;
-use Discord\Websockets\Intents;
 use Discord\Parts\User\Activity;
 use Discord\Builders\MessageBuilder;
 use Discord\Parts\Channel;
@@ -11,32 +11,36 @@ use Unirest\Request;
 use Discord\Parts\Interactions\Command\Command;
 use Discord\Parts\Interactions\Interaction;
 
+
+ini_set('memory_limit', '-1');
 require_once 'vendor/autoload.php';
 require_once 'vendor/mashape/unirest-php/src/Unirest.php';
 require_once('./vendor/autoload.php');
 require_once('./key.php');
 $key = getKey();
 
-$discord = new Discord(['token'=>$key]);
+$discord = new Discord([
+    'token'=>$key
+]);
 $discord->on('ready', function(Discord $discord){
-        // Remove this
+            // Remove this
         
-        $command = new Command($discord, ['name' => 'lookup', 'description' => 'Lookup Informations about Ip adresses or Domains', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
+            $command = new Command($discord, ['name' => 'lookup', 'description' => 'Lookup Informations about Ip adresses or Domains', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
+            $discord->application->commands->save($command);
+            $command = new Command($discord, ['name' => 'whois', 'description' => 'Get WHOIS Informations about a IP adress or Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
+            $discord->application->commands->save($command);
+            $command = new Command($discord, ['name' => 'ping', 'description' => 'Ping an IP adress or Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
+            $discord->application->commands->save($command);
+            $command = new Command($discord, ['name' => 'website', 'description' => 'Get a Link to a Website that does the Same']);
+            $discord->application->commands->save($command);
+            $command = new Command($discord, ['name' => 'about', 'description' => 'Get Informations About this Bot']);
+            $discord->application->commands->save($command);
+            $command = new Command($discord, ['name' => 'help', 'description' => 'Get a list of Commands']);
+            $discord->application->commands->save($command);
+        $command = new Command($discord, ['name' => 'dnslookup', 'description' => 'Lookup DNS Records for a specific Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain', 'required' => true]]]);
         $discord->application->commands->save($command);
-        $command = new Command($discord, ['name' => 'whois', 'description' => 'Get WHOIS Informations about a IP adress or Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
-        $discord->application->commands->save($command);
-        $command = new Command($discord, ['name' => 'ping', 'description' => 'Ping an IP adress or Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
-        $discord->application->commands->save($command);
-        $command = new Command($discord, ['name' => 'website', 'description' => 'Get a Link to a Website that does the Same']);
-        $discord->application->commands->save($command);
-        $command = new Command($discord, ['name' => 'about', 'description' => 'Get Informations About this Bot']);
-        $discord->application->commands->save($command);
-        $command = new Command($discord, ['name' => 'help', 'description' => 'Get a list of Commands']);
-        $discord->application->commands->save($command);
-    $command = new Command($discord, ['name' => 'dnslookup', 'description' => 'Lookup DNS Records for a specific Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain', 'required' => true]]]);
-    $discord->application->commands->save($command);
-        
-        // To this 
+            
+            // To this 
     echo'Bot ist Online';
 
         $activity = $discord->factory(\Discord\Parts\User\Activity::class);
@@ -325,8 +329,9 @@ Phone: '.$techcontact->phone.'
 Fax: '.$techcontact->fax.'
 Created: '.$techcontact->created.'
 Changed: '.$techcontact->changed.'
-
             ';
+
+            if(strlen($whoismessage) > 2000) {
 
             file_put_contents($whoisid, $whoismessage);
 
@@ -334,9 +339,19 @@ Changed: '.$techcontact->changed.'
                 ->setContent('**WHOIS Report for '.$whoisquery.'**')
                 ->addFile($whoisid);
 
-            $message->reply($whoismsg);
+                $message->reply($whoismsg);
+                !unlink($whoisid);
+            } else {
+            $whoismsg = MessageBuilder::new()
+                ->setContent('
+                **WHOIS Report for '.$whoisquery.'**
+                ```
+                '.$whoismessage.'
+                ```
+                ');
 
-            !unlink($whoisid);
+                $message->reply($whoismsg);
+            }
             } else {
                 $message->reply('**Your request failed!**
 Please follow this command scheme `​$​w​h​o​i​s​​ [INSERT IP ADRESS / DOMAIN HERE]` **(only the Domain/IP Adress. No Protocols or Directories.)** Example: `​$​w​h​o​i​s​​ google.com`
@@ -359,15 +374,28 @@ Please follow this command scheme `​$​d​n​s​l​o​o​k​u​p​ [
 Please follow this command scheme `​$​d​n​s​l​o​o​k​u​p​ [DOMAIN HERE]` **(This command ONLY supports DOMAINS)** Example: `​$​d​n​s​l​o​o​k​u​p​​ google.com`';
     
             } else {
+                if(strlen($dnsraw) > 2000) {
+                    $dnsid = 'whois_reports/' . uniqid('DNS_') . '.txt';
+ 
+                    file_put_contents($dnsid, $dnsraw);
+
+                    $dnsrp =  $whoismsg = MessageBuilder::new()
+                        ->setContent('**DNS Lookup for '.$dnsquery.'**')
+                        ->addFile($dnsid);
+
+                    $message->reply($dnsrp);
+                    !unlink($dnsid);
+                } else {
                 $dnsrp = '**DNS Lookup for '.$dnsquery.'**
 ```
 '.$dnsraw.'
 ```
                 ';
+                $message->reply($dnsrp);
+                }
             }
     
-    
-            $message->reply($dnsrp);
+
         }
 
     });
@@ -615,12 +643,21 @@ Created: '.$techcontact->created.'
 Changed: '.$techcontact->changed.'
 
     ';
+    if(strlen($whoismessage) > 2000) {
 
     file_put_contents($whoisid, $whoismessage);
 
     $interaction->respondWithMessage(MessageBuilder::new()->setContent('**WHOIS Report for '.$whoisquery.'**')->addFile($whoisid));
 
     !unlink($whoisid);
+    } else {
+        $interaction->respondWithMessage(MessageBuilder::new()->setContent('
+        **WHOIS Report for '.$whoisquery.'**
+        ```
+        '.$whoismessage.'
+        ```
+        '));
+    }
     } else {
         $interaction->respondWithMessage(MessageBuilder::new()->setContent('**Your request failed!**
 Please follow this command scheme `​$​w​h​o​i​s​​ [INSERT IP ADRESS / DOMAIN HERE]` **(only the Domain/IP Adress. No Protocols or Directories.)** Example: `​$​w​h​o​i​s​​ google.com`
@@ -681,15 +718,26 @@ Please follow this command scheme `​$​d​n​s​l​o​o​k​u​p​ [
 Please follow this command scheme `​$​d​n​s​l​o​o​k​u​p​ [DOMAIN HERE]` **(This command ONLY supports DOMAINS)** Example: `​$​d​n​s​l​o​o​k​u​p​​ google.com`';
 
     } else {
+        if(strlen($dnsraw) > 2000) {
+            $dnsid = 'whois_reports/' . uniqid('DNS_') . '.txt';
+
+            file_put_contents($dnsid, $dnsraw);
+
+            $interaction->respondWithMessage(MessageBuilder::new()->setContent('**DNS Lookup for '.$dnsquery.'**')->addFile($dnsid));
+
+            !unlink($dnsid);
+        } else {
         $dnsrp = '**DNS Lookup for '.$dnsquery.'**
 ```
 '.$dnsraw.'
 ```
-';
+        ';
+        $interaction->respondWithMessage(MessageBuilder::new()->setContent($dnsrp));
+        }
     }
 
 
-    $interaction->respondWithMessage(MessageBuilder::new()->setContent($dnsrp));
+    
 });
 
 $discord->run();
