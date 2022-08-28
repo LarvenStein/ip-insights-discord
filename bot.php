@@ -23,24 +23,26 @@ $discord = new Discord([
     'token'=>$key
 ]);
 $discord->on('ready', function(Discord $discord){
-            // Remove this
+                // Remove this
         
-            $command = new Command($discord, ['name' => 'lookup', 'description' => 'Lookup Informations about Ip adresses or Domains', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
+                $command = new Command($discord, ['name' => 'lookup', 'description' => 'Lookup Informations about Ip adresses or Domains', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
+                $discord->application->commands->save($command);
+                $command = new Command($discord, ['name' => 'whois', 'description' => 'Get WHOIS Informations about a IP adress or Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
+                $discord->application->commands->save($command);
+                $command = new Command($discord, ['name' => 'ping', 'description' => 'Ping an IP adress or Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
+                $discord->application->commands->save($command);
+                $command = new Command($discord, ['name' => 'website', 'description' => 'Get a Link to a Website that does the Same']);
+                $discord->application->commands->save($command);
+                $command = new Command($discord, ['name' => 'about', 'description' => 'Get Informations About this Bot']);
+                $discord->application->commands->save($command);
+                $command = new Command($discord, ['name' => 'help', 'description' => 'Get a list of Commands']);
+                $discord->application->commands->save($command);
+            $command = new Command($discord, ['name' => 'dnslookup', 'description' => 'Lookup DNS Records for a specific Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain', 'required' => true]]]);
             $discord->application->commands->save($command);
-            $command = new Command($discord, ['name' => 'whois', 'description' => 'Get WHOIS Informations about a IP adress or Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
+            $command = new Command($discord, ['name' => 'http', 'description' => 'View the HTTP Headers of a Website', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
             $discord->application->commands->save($command);
-            $command = new Command($discord, ['name' => 'ping', 'description' => 'Ping an IP adress or Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain or IP Adress', 'required' => true]]]);
-            $discord->application->commands->save($command);
-            $command = new Command($discord, ['name' => 'website', 'description' => 'Get a Link to a Website that does the Same']);
-            $discord->application->commands->save($command);
-            $command = new Command($discord, ['name' => 'about', 'description' => 'Get Informations About this Bot']);
-            $discord->application->commands->save($command);
-            $command = new Command($discord, ['name' => 'help', 'description' => 'Get a list of Commands']);
-            $discord->application->commands->save($command);
-        $command = new Command($discord, ['name' => 'dnslookup', 'description' => 'Lookup DNS Records for a specific Domain', 'options' => [['type' => 3, 'name' => 'query', 'description' => 'Enter a Domain', 'required' => true]]]);
-        $discord->application->commands->save($command);
-            
-            // To this 
+                
+                // To this 
     echo'Bot ist Online';
 
         $activity = $discord->factory(\Discord\Parts\User\Activity::class);
@@ -58,7 +60,7 @@ $discord->on('ready', function(Discord $discord){
             {
                 "title": "IP Insights Commands",
                 "color": 0,
-                "description": "`​/​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*\n\n`​/​w​h​o​i​s​ [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain*\n\n`​/d​n​s​l​o​o​k​u​p [INSERT DOMAIN HERE]` - *Lookup DNS Records for a specific Domain*\n\n`​/​p​i​n​g​ [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*\n\n--\n\n\n`​/​w​e​b​s​i​t​e​` - *Get a Link to a Website that does the Same* \n\n`​/​a​b​o​u​t​`​ - *Get Informations About this Bot* \n\n\n",
+                "description": "`​/​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*\n\n`​/​w​h​o​i​s​ [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain*\n\n`​/d​n​s​l​o​o​k​u​p [INSERT DOMAIN HERE]` - *Lookup DNS Records for a specific Domain*\n\n`/http [INSERT IP ADRESS / DOMAIN HERE]` - *View the HTTP Headers of a Website*\n\n`​/​p​i​n​g​ [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*\n\n--\n\n\n`​/​w​e​b​s​i​t​e​` - *Get a Link to a Website that does the Same* \n\n`​/​a​b​o​u​t​`​ - *Get Informations About this Bot* \n\n\n",
                 "timestamp": "",
                 "author": {
                   "name": "",
@@ -123,7 +125,6 @@ https://ip.steinlarve.de
 
             $message->reply($embedmsg);
         }
-
 
         if(strpos($content, '$lookup') === false) {
 
@@ -398,6 +399,46 @@ Please follow this command scheme `​$​d​n​s​l​o​o​k​u​p​ [
 
         }
 
+        
+        if(strpos($content, '$http') === false) {
+
+        } else {
+            $request = end(explode(' ',$content));
+            $request_content = json_decode(file_get_contents('https://uploadbeta.com/api/curl/?url=https://'.$request.''));
+
+
+            if($request_content == 'Invalid URL') {
+                $message->reply('**Your request failed!**
+Please follow this command scheme `​$​h​tt​p​​​ [INSERT IP ADRESS / DOMAIN HERE]` **(only the Domain/IP Adress. No Protocols.)** Example: `​$​h​tt​p​​​ discord.com/developers`
+                ');
+            } elseif($request_content == null) {
+                $message->reply('**Your request failed!**
+Please follow this command scheme `​$​h​tt​p​​​ [INSERT IP ADRESS / DOMAIN HERE]` **(only the Domain/IP Adress. No Protocols.)** Example: `​$​h​tt​p​​​ discord.com/developers`
+                ');
+            } else {
+                if(strlen($request_content) > 1970) {
+                    $httpid = 'whois_reports/' . uniqid('HTTP_') . '.txt';
+ 
+                    file_put_contents($httpid, $request_content);
+
+                    $httprp =  $whoismsg = MessageBuilder::new()
+                        ->setContent('**HTTP Headers from '.$request.'**')
+                        ->addFile($httpid);
+
+                    $message->reply($httprp);
+                    !unlink($httpid);
+                } else {
+                $httprp = '**HTTP Headers from '.$request.'**
+```
+'.$request_content.'
+```
+                ';
+                $message->reply($httprp);
+            }
+
+        }
+
+    }
     });
 
 });
@@ -443,7 +484,7 @@ $discord->listenCommand('help', function (Interaction $interaction) {
     {
         "title": "IP Insights Commands",
         "color": 0,
-        "description": "`​/​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*\n\n`​/​w​h​o​i​s​ [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain*\n\n`​/d​n​s​l​o​o​k​u​p [INSERT DOMAIN HERE]` - *Lookup DNS Records for a specific Domain*\n\n`​/​p​i​n​g​ [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*\n\n--\n\n\n`​/​w​e​b​s​i​t​e​` - *Get a Link to a Website that does the Same* \n\n`​/​a​b​o​u​t​`​ - *Get Informations About this Bot* \n\n\n",
+        "description": "`​/​l​o​o​k​u​p​ [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*\n\n`​/​w​h​o​i​s​ [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain*\n\n`​/d​n​s​l​o​o​k​u​p [INSERT DOMAIN HERE]` - *Lookup DNS Records for a specific Domain*\n\n`/http [INSERT IP ADRESS / DOMAIN HERE]` - *View the HTTP Headers of a Website*\n\n`​/​p​i​n​g​ [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*\n\n--\n\n\n`​/​w​e​b​s​i​t​e​` - *Get a Link to a Website that does the Same* \n\n`​/​a​b​o​u​t​`​ - *Get Informations About this Bot* \n\n\n",
         "timestamp": "",
         "author": {
           "name": "",
@@ -547,6 +588,7 @@ $discord->listenCommand('whois', function (Interaction $interaction) {
     $statusdata_decode = json_decode($statusdata, true);
 
     if($statusdata_decode['status'] == 'success') {
+        
 
     $whoisid = 'whois_reports/' . uniqid('WHOIS_') . '.txt';
     
@@ -740,4 +782,41 @@ Please follow this command scheme `​$​d​n​s​l​o​o​k​u​p​ [
     
 });
 
+$discord->listenCommand('http', function (Interaction $interaction) {
+    $request = $interaction['data']['options']['query']['value'];
+$request_content = json_decode(file_get_contents('https://uploadbeta.com/api/curl/?url=https://'.$request.''));
+
+
+if($request_content == 'Invalid URL') {
+    $interaction->respondWithMessage(MessageBuilder::new()->setContent('**Your request failed!**
+Please follow this command scheme `​$​h​tt​p​​​ [INSERT IP ADRESS / DOMAIN HERE]` **(only the Domain/IP Adress. No Protocols.)** Example: `​$​h​tt​p​​​ discord.com/developers`
+    '));
+} elseif($request_content == null) {
+    $interaction->respondWithMessage(MessageBuilder::new()->setContent('**Your request failed!**
+Please follow this command scheme `​$​h​tt​p​​​ [INSERT IP ADRESS / DOMAIN HERE]` **(only the Domain/IP Adress. No Protocols.)** Example: `​$​h​tt​p​​​ discord.com/developers`
+    '));
+} else {
+    if(strlen($request_content) > 1970) {
+        $httpid = 'whois_reports/' . uniqid('HTTP_') . '.txt';
+
+        file_put_contents($httpid, $request_content);
+
+        $httprp =  $whoismsg = MessageBuilder::new()
+            ->setContent('**HTTP Headers from '.$request.'**')
+            ->addFile($httpid);
+
+        $interaction->respondWithMessage($httprp);
+        !unlink($httpid);
+    } else {
+    $httprp = '**HTTP Headers from '.$request.'**
+```
+'.$request_content.'
+```
+    ';
+    $interaction->respondWithMessage(MessageBuilder::new()->setContent($httprp));
+}
+
+}
+
+});
 $discord->run();
