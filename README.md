@@ -22,11 +22,14 @@ Please Remove [Line 26 - 45](https://github.com/LarvenStein/ip-insights-discord/
 ### /lookup report
 ![image](https://user-images.githubusercontent.com/89642388/180652348-226e3e1a-b323-4825-bdc8-ab723a8a65d7.png)
 
-## /whois report
+### /whois report
 ![image](https://user-images.githubusercontent.com/89642388/180652404-bcd20420-5b18-46bd-9a52-8069a4fa80b1.png)
 
-## /dnslookup report
+### /dnslookup report
 ![image](https://user-images.githubusercontent.com/89642388/181920132-8624f13f-26ba-480c-8a37-ded23901e9e4.png)
+
+### /http report
+![image](https://user-images.githubusercontent.com/89642388/187089074-bbf2acc5-5edc-479c-a54e-08ae3c1ec4d2.png)
 
 ### /ping report
 ![image](https://user-images.githubusercontent.com/89642388/180652379-4464099b-30e9-4b7c-b514-32d025dc3590.png)
