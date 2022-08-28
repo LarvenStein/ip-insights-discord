@@ -10,6 +10,7 @@ Please Remove [Line 26 - 45](https://github.com/LarvenStein/ip-insights-discord/
 - `/lookup [INSERT IP ADRESS / DOMAIN HERE]` - *Lookup Informations about Ip adresses or Domains*
 - `/whois [INSERT IP ADRESS / DOMAIN HERE]` - *Get WHOIS Informations about a IP adress or Domain*
 - `/d​n​s​l​o​o​k​u​p [INSERT DOMAIN HERE]` - *Lookup DNS Records for a specific Domain*
+- `/http [INSERT IP ADRESS / DOMAIN HERE]` - *View the HTTP Headers of a Website*
 - `/ping [INSERT IP ADRESS / DOMAIN HERE]` - *Ping an IP adress or Domain*
 
 - `/help` - *Gives Informations about all available Commands*
